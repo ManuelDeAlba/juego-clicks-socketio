@@ -66,6 +66,8 @@ window.addEventListener('load', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    if(canvas.requestFullscreen) canvas.requestFullscreen();
+
     inputNombre.focus();
     loop();
 })
