@@ -7,6 +7,7 @@ body{
     font-family: sans-serif;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overscroll-behavior: contain;
@@ -62,6 +63,22 @@ body{
     background: #555;
     border: 1px solid #555;
 }
+
+#btnPantallaCompleta{
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background: rgb(47, 186, 255);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+#btnPantallaCompleta img{
+    margin-left: 10px;
+    vertical-align: sub;
+}
+#btnPantallaCompleta:hover{ background: rgb(8, 173, 255); }
+#btnPantallaCompleta:active{ background: rgb(0, 154, 231); }
 
 canvas{
     width: 100%;

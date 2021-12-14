@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 const modalNombre = document.getElementById("modalNombre");
 const formularioNombre = document.getElementById("formularioNombre");
 const inputNombre = document.getElementById("inpNombre");
+const btnPantallaCompleta = document.getElementById("btnPantallaCompleta");
 
 const socket = io();
 
@@ -38,10 +39,16 @@ function loop(){
     requestAnimationFrame(loop);
 }
 
+function pantallaCompleta(){
+    if(canvas.requestFullscreen) canvas.requestFullscreen();
+    else alert("Tu navegador no soporta pantalla completa");
+}
+
+//! EVENTOS
 canvas.addEventListener('click', e => {
     // Convertir las coordenadas reales a un máximo de 500 para hacer el juego responsive
-    let x = (e.clientX / canvas.width) * 500;
-    let y = (e.clientY / canvas.height) * 500;
+    let x = ((e.clientX - canvas.getBoundingClientRect().left) / canvas.width) * 500;
+    let y = ((e.clientY - canvas.getBoundingClientRect().top) / canvas.height) * 500;
 
     if(x < cuadrado.x + cuadrado.tam && x > cuadrado.x && y < cuadrado.y + cuadrado.tam && y > cuadrado.y){
         puntos++;
@@ -60,9 +67,9 @@ formularioNombre.addEventListener('submit', (e) => {
     nombre = inputNombre.value;
 
     modalNombre.classList.add("cerrado");
-
-    if(canvas.requestFullscreen) canvas.requestFullscreen();
 })
+
+btnPantallaCompleta.addEventListener('click', pantallaCompleta);
 
 window.addEventListener('load', () => {
     canvas.width = window.innerWidth;
