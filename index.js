@@ -22,6 +22,7 @@ let cuadrado = {
 }
 
 function reiniciarCuadrado(){
+    tam = 20 + Math.random() * 30;
     cuadrado = {
         x: Math.random() * (500 - tam),
         y: Math.random() * (500 - tam),
@@ -33,14 +34,28 @@ function reiniciarCuadrado(){
     io.emit("dataCuadrado", cuadrado);
 }
 
+function reiniciarJuego(mensaje){
+    // Mensaje de victoria
+    io.emit("victoria", {mensaje});
+
+    // Cambiar posición del cuadrado
+    reiniciarCuadrado();
+}
+
 io.on("connection", socket => {
     console.log("Nueva conexión:", socket.id);
 
-    // Pasar el objeto cuadrado
+    //! Al conectarse pasar el objeto cuadrado
     io.emit("dataCuadrado", cuadrado);
 
+    //! Cuando un jugador le da click
     socket.on("click", ({id}) => {
         console.log(`Jugador ${id} dió el click`);
         reiniciarCuadrado();
+    })
+
+    //! Cuando un jugador avisa que ya ganó
+    socket.on("victoria", ({ mensaje }) => {
+        reiniciarJuego(mensaje);
     })
 })

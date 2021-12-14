@@ -5,8 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego clicks</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <div class="modal" id="modalNombre">
+        <form id="formularioNombre">
+            <h2>Introduce tu nombre</h2>
+            <div>
+                <input type="text" id="inpNombre">
+                <input type="submit" value="Comenzar">
+            </div>
+        </form>
+    </div>
     <canvas id="canvas" width="500" height="500" style="border: 1px solid #000;"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/script.js"></script>
