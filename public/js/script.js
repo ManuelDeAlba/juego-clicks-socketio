@@ -19,8 +19,14 @@ function dibujar(){
 
     if(cuadrado){
         let {x, y, tam, color} = cuadrado;
+
+        // Razon para dibujar el cuadrado en toda la pantalla aunque la coordenada tenga un máximo de 500
+        // Hacer proporcional el juego en todas las pantallas
+        let razonX = canvas.width / 500;
+        let razonY = canvas.height / 500;
+
         ctx.fillStyle = color;
-        ctx.fillRect(x, y, tam, tam);
+        ctx.fillRect(x * razonX, y * razonY, tam, tam);
     }
 }
 
@@ -33,8 +39,9 @@ function loop(){
 }
 
 canvas.addEventListener('click', e => {
-    let x = e.clientX - canvas.getBoundingClientRect().left;
-    let y = e.clientY - canvas.getBoundingClientRect().top;
+    // Convertir las coordenadas reales a un máximo de 500 para hacer el juego responsive
+    let x = (e.clientX / canvas.width) * 500;
+    let y = (e.clientY / canvas.height) * 500;
 
     if(x < cuadrado.x + cuadrado.tam && x > cuadrado.x && y < cuadrado.y + cuadrado.tam && y > cuadrado.y){
         puntos++;
@@ -56,8 +63,16 @@ formularioNombre.addEventListener('submit', (e) => {
 })
 
 window.addEventListener('load', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
     inputNombre.focus();
     loop();
+})
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 })
 
 //! EVENTOS SOCKET.IO
