@@ -60,13 +60,13 @@ formularioNombre.addEventListener('submit', (e) => {
     nombre = inputNombre.value;
 
     modalNombre.classList.add("cerrado");
+
+    if(canvas.requestFullscreen) canvas.requestFullscreen();
 })
 
 window.addEventListener('load', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
-    if(canvas.requestFullscreen) canvas.requestFullscreen();
 
     inputNombre.focus();
     loop();
