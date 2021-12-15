@@ -13,19 +13,19 @@ const server = app.listen(app.get("PORT"), () => {
 
 const io = socketIO(server);
 
-let tam = 20 + Math.random() * 30;
+let tam = 30 + Math.floor(Math.random() * 20);
 let cuadrado = {
-    x: Math.random() * (500 - tam),
-    y: Math.random() * (500 - tam),
+    x: Math.floor(Math.random() * (500 - tam)),
+    y: Math.floor(Math.random() * (500 - tam)),
     tam: tam,
     color: "red"
 }
 
 function reiniciarCuadrado(){
-    tam = 20 + Math.random() * 30;
+    tam = 30 + Math.floor(Math.random() * 20);
     cuadrado = {
-        x: Math.random() * (500 - tam),
-        y: Math.random() * (500 - tam),
+        x: Math.floor(Math.random() * (500 - tam)),
+        y: Math.floor(Math.random() * (500 - tam)),
         tam: tam,
         color: "red"
     }

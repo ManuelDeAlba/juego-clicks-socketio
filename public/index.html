@@ -9,15 +9,21 @@
 </head>
 <body>
     <div class="modal" id="modalNombre">
-        <form id="formularioNombre">
+        <form id="formularioNombre" class="ventana">
             <h2>Introduce tu nombre</h2>
             <div>
                 <input type="text" id="inpNombre">
-                <input type="submit" value="Comenzar">
+                <input type="submit" value="Comenzar" class="boton">
             </div>
         </form>
     </div>
-    <button id="btnPantallaCompleta">Pantalla completa <img src="img/fullscreen.png" width="20" alt="Pantalla completa"></button>
+    <div class="modal cerrado" id="modalAlerta">
+        <div class="ventana">
+            <h2 class="modalAlerta__texto">Ganador: Manuel</h2>
+            <button class="boton" id="btnAlerta">Aceptar</button>
+        </div>
+    </div>
+    <button class="boton" id="btnPantallaCompleta">Pantalla completa <img src="img/fullscreen.png" width="20" alt="Pantalla completa"></button>
     <canvas id="canvas" width="500" height="500"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/script.js"></script>

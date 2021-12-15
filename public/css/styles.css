@@ -11,7 +11,10 @@ body{
     justify-content: center;
     align-items: center;
     overscroll-behavior: contain;
+    background: #ddd;
 }
+
+/*! Componentes */
 .modal{
     position: fixed;
     top: 0;
@@ -24,7 +27,7 @@ body{
     align-items: center;
 }
 .modal.cerrado{ display: none; }
-#formularioNombre{
+.ventana{
     width: 50%;
     background: #fff;
     border-radius: 3px;
@@ -34,6 +37,19 @@ body{
     align-items: center;
     box-shadow: 0 0 5px rgba(0,0,0,.5);
 }
+
+.boton{
+    padding: 10px 20px;
+    font-size: 1em;
+    background: rgb(47, 186, 255);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.boton:hover{ background: rgb(8, 173, 255); }
+.boton:active{ background: rgb(0, 154, 231); }
+
+/*! Formulario nombre */
 #formularioNombre h2{
     text-align: center;
     font-size: 2em;
@@ -54,39 +70,32 @@ body{
 }
 #formularioNombre input[type=submit]{
     width: 30%;
-    background: #777;
-    color: #fff;
-    border: 1px solid #777;
-    cursor: pointer;
-}
-#formularioNombre input[type=submit]:hover{
-    background: #555;
-    border: 1px solid #555;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.5em;
 }
 
-#btnPantallaCompleta{
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1em;
-    background: rgb(47, 186, 255);
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
+/*! Pantalla completa */
+#btnPantallaCompleta{ margin: 10px; }
 #btnPantallaCompleta img{
     margin-left: 10px;
     vertical-align: sub;
 }
-#btnPantallaCompleta:hover{ background: rgb(8, 173, 255); }
-#btnPantallaCompleta:active{ background: rgb(0, 154, 231); }
 
+/*! Canvas */
 canvas{
     width: 100%;
     height: 100vh;
     display: block;
     background: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.5);
 }
 
+/*! Ventana ganador */
+#modalAlerta .ventana{ font-size: 1.5em; }
+.modalAlerta__texto{ margin-bottom: 30px; }
+
+/*! Diseño responsivo */
 @media screen and (max-width: 1100px){
     #formularioNombre input{ font-size: 1.2em; }
 }

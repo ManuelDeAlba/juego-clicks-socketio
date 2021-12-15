@@ -6,6 +6,10 @@ const formularioNombre = document.getElementById("formularioNombre");
 const inputNombre = document.getElementById("inpNombre");
 const btnPantallaCompleta = document.getElementById("btnPantallaCompleta");
 
+const modalAlerta = document.getElementById("modalAlerta");
+const pAlerta = document.querySelector(".modalAlerta__texto");
+const btnAlerta = document.getElementById("btnAlerta");
+
 const socket = io();
 
 let cuadrado;
@@ -13,22 +17,67 @@ let nombre;
 
 let puntos = 0;
 let puntosVictoria = 20;
+let cuadradoContado = false;
 
+//! FUNCIONES
 function dibujar(){
-    ctx.font = "20px Arial";
-    ctx.fillText(`Puntos: ${puntos}`, 10,30);
-
     if(cuadrado){
-        let {x, y, tam, color} = cuadrado;
-
-        // Razon para dibujar el cuadrado en toda la pantalla aunque la coordenada tenga un máximo de 500
-        // Hacer proporcional el juego en todas las pantallas
-        let razonX = canvas.width / 500;
-        let razonY = canvas.height / 500;
-
-        ctx.fillStyle = color;
-        ctx.fillRect(x * razonX, y * razonY, tam, tam);
+        ctx.fillStyle = cuadrado.color;
+        ctx.fillRect(cuadrado.x, cuadrado.y, cuadrado.tam, cuadrado.tam);
     }
+
+    ctx.fillStyle = "#000";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(`Puntos: ${puntos}`, canvas.width/2,30);
+}
+
+function comprobarClick(e){
+    let x = e.clientX - canvas.getBoundingClientRect().left;
+    let y = e.clientY - canvas.getBoundingClientRect().top;
+
+    if(x < cuadrado.x + cuadrado.tam && x > cuadrado.x && y < cuadrado.y + cuadrado.tam && y > cuadrado.y && !cuadradoContado){
+        cuadradoContado = true;
+        
+        puntos++;
+
+        socket.emit("click", {id: socket.id});
+        
+        if(puntos >= puntosVictoria){
+            socket.emit("victoria", { mensaje: `Ganador: ${nombre}` })
+        }
+    }
+}
+
+function actualizarCuadrado(data){
+    cuadrado = data;
+
+    // Razon para convertir las coordenadas del cuadrado proporcionalmente
+    // Hacer proporcional el juego en todas las pantallas
+    let razonX = canvas.width / 500;
+    let razonY = canvas.height / 500;
+
+    cuadrado.x = cuadrado.x * razonX;
+    cuadrado.y = cuadrado.y * razonY;
+
+    cuadradoContado = false;
+}
+
+function pantallaCompleta(){
+    if(canvas.requestFullscreen) canvas.requestFullscreen();
+    else alert("Tu navegador no soporta pantalla completa");
+}
+
+function reiniciarJuego(mensaje){
+    if(document.fullscreen) document.exitFullscreen();
+    abrirAlerta(mensaje);
+
+    puntos = 0;
+}
+
+function abrirAlerta(mensaje){
+    pAlerta.textContent = mensaje;
+    modalAlerta.classList.remove("cerrado");
 }
 
 function loop(){
@@ -39,40 +88,22 @@ function loop(){
     requestAnimationFrame(loop);
 }
 
-function pantallaCompleta(){
-    if(canvas.requestFullscreen) canvas.requestFullscreen();
-    else alert("Tu navegador no soporta pantalla completa");
-}
-
 //! EVENTOS
-canvas.addEventListener('click', e => {
-    // Convertir las coordenadas reales a un máximo de 500 para hacer el juego responsive
-    let x = ((e.clientX - canvas.getBoundingClientRect().left) / canvas.width) * 500;
-    let y = ((e.clientY - canvas.getBoundingClientRect().top) / canvas.height) * 500;
-
-    if(x < cuadrado.x + cuadrado.tam && x > cuadrado.x && y < cuadrado.y + cuadrado.tam && y > cuadrado.y){
-        puntos++;
-
-        socket.emit("click", {id: socket.id});
-        
-        if(puntos >= puntosVictoria){
-            socket.emit("victoria", { mensaje: `Ganador: ${nombre}` })
-        }
-    }
-})
+canvas.addEventListener('click', e => comprobarClick(e));
 
 formularioNombre.addEventListener('submit', (e) => {
     e.preventDefault();
+    nombre = inputNombre.value.trim();
 
-    nombre = inputNombre.value;
-
-    modalNombre.classList.add("cerrado");
+    if(nombre) modalNombre.classList.add("cerrado");
 })
 
 btnPantallaCompleta.addEventListener('click', pantallaCompleta);
 
+btnAlerta.addEventListener('click', () => { modalAlerta.classList.add("cerrado"); })
+
 window.addEventListener('load', () => {
-    canvas.width = window.innerWidth;
+    canvas.width = document.body.clientWidth;
     canvas.height = window.innerHeight;
 
     inputNombre.focus();
@@ -80,17 +111,11 @@ window.addEventListener('load', () => {
 })
 
 window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
+    canvas.width = document.body.clientWidth;
     canvas.height = window.innerHeight;
 })
 
 //! EVENTOS SOCKET.IO
-socket.on("dataCuadrado", data => {
-    cuadrado = data;
-})
+socket.on("dataCuadrado", data => actualizarCuadrado(data));
 
-socket.on("victoria", ({mensaje}) => {
-    alert(mensaje);
-
-    puntos = 0;
-})
+socket.on("victoria", ({mensaje}) => reiniciarJuego(mensaje));
